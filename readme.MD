@@ -1,7 +1,7 @@
 Install below plugins when you started Jenkins.
 Jenkins master
 Plugins:
-
+============
 Pipeline stage view
 Pipeline Utility Steps
 AWS credentials
