@@ -2,6 +2,7 @@ resource "aws_instance" "jenkins" {
   ami                    = data.aws_ami.joindevops.id
   vpc_security_group_ids = ["sg-02f18e4bed9d09120"]
   instance_type          = "t3.micro"
+  subnet_id              = "subnet-095a1f4d4024b60f7"
   tags = merge(
     var.common_tags,
     {
@@ -10,13 +11,12 @@ resource "aws_instance" "jenkins" {
     }
   )
   # 20GB is not enough
- root_block_device = [
-    {
-      volume_size = 50       # Size of the root volume in GB
-      volume_type = "gp3"    # General Purpose SSD (you can change it if needed)
-      delete_on_termination = true  # Automatically delete the volume when the instance is terminated
-    }
-  ]
+  root_block_device {
+    volume_size           = 50    # Size of the root volume in GB
+    volume_type           = "gp3" # General Purpose SSD (you can change it if needed)
+    delete_on_termination = true  # Automatically delete the volume when the instance is terminated
+  }
+
   user_data = file("jenkins-master.sh")
 
 }
@@ -31,13 +31,12 @@ resource "aws_instance" "jenkins-agent" {
       Name = "${var.project_name}-${var.environment}-jenkins-agent"
     }
   )
-  root_block_device = [
-    {
-      volume_size = 50       # Size of the root volume in GB
-      volume_type = "gp3"    # General Purpose SSD (you can change it if needed)
-      delete_on_termination = true  # Automatically delete the volume when the instance is terminated
-    }
-  ]
+  root_block_device {
+    volume_size           = 50    # Size of the root volume in GB
+    volume_type           = "gp3" # General Purpose SSD (you can change it if needed)
+    delete_on_termination = true  # Automatically delete the volume when the instance is terminated
+  }
+
   user_data = file("jenkins-agent.sh")
 
 }
@@ -49,20 +48,20 @@ module "records" {
 
   records = [
     {
-      name    = "jenkins"
-      type    = "A"
-      ttl     = 1
+      name = "jenkins"
+      type = "A"
+      ttl  = 1
       records = [
         aws_instance.jenkins.public_ip
       ]
       allow_overwrite = true
     },
     {
-      name    = "jenkins-agent"
-      type    = "A"
-      ttl     = 1
+      name = "jenkins-agent"
+      type = "A"
+      ttl  = 1
       records = [
-        aws_instance.jenkins_agent.private_ip
+        aws_instance.jenkins-agent.private_ip
       ]
       allow_overwrite = true
     }
