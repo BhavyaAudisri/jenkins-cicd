@@ -7,4 +7,4 @@ Pipeline Utility Steps
 AWS credentials
 AWS steps
 ANSI COLORS
-Rebuild === used tomknow the previous action in pipeline
+Rebuild === used to know the previous action in pipeline
