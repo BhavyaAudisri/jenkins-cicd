@@ -1,6 +1,6 @@
 resource "aws_instance" "jenkins" {
   ami                    = data.aws_ami.joindevops.id
-  vpc_security_group_ids = ["sg-02f18e4bed9d09120"]
+  vpc_security_group_ids = ["sg-06382d8940e141231"]
   instance_type          = "t3.micro"
   subnet_id              = "subnet-095a1f4d4024b60f7"
   tags = merge(
@@ -23,7 +23,7 @@ resource "aws_instance" "jenkins" {
 # jenkins agent creating
 resource "aws_instance" "jenkins-agent" {
   ami                    = "ami-09c813fb71547fc4f"
-  vpc_security_group_ids = ["sg-02f18e4bed9d09120"]
+  vpc_security_group_ids = ["sg-06382d8940e141231"]
   instance_type          = "t3.micro"
   tags = merge(
     var.common_tags,
